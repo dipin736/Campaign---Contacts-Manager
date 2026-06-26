@@ -5,6 +5,6 @@ import { ContactManagerComponent } from './pages/contact-manager/contact-manager
 export const routes: Routes = [
   { path: '', redirectTo: 'message-composer', pathMatch: 'full' },
   { path: 'message-composer', component: MessageComposerComponent },
-
+  { path: 'contacts', component: ContactManagerComponent },
   { path: '**', redirectTo: 'message-composer' }
 ];

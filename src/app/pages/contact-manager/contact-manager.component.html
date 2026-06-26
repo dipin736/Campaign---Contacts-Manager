@@ -1,0 +1,382 @@
+<div class="contacts-page">
+
+  <header class="contacts-header animate-fade-in">
+    <div class="header-text">
+      <h1>Contact Directory</h1>
+      <p class="subtext">Manage clients profiles, contact details, tax identifiers (PAN), and credentials status.</p>
+    </div>
+  </header>
+
+
+  <div class="control-bar card animate-fade-in">
+    <div class="controls-left">
+
+      <div class="search-wrapper">
+        <span class="search-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </span>
+        <input 
+          type="text" 
+          class="form-input" 
+          placeholder="Search by name or email..." 
+          [(ngModel)]="searchQuery" 
+          (ngModelChange)="onSearchChange()"
+        />
+      </div>
+
+
+      <div class="filter-select-wrapper">
+        <select class="form-select" [(ngModel)]="statusFilter" (change)="onFilterChange()">
+          <option value="all">All Statuses</option>
+          <option value="active">Active Only</option>
+          <option value="inactive">Inactive Only</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" (click)="openAddDrawer()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      Add Contact
+    </button>
+  </div>
+
+
+  <div class="table-card card animate-fade-in">
+    <div class="table-container">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Profile Name</th>
+            <th>Email Address</th>
+            <th>Age / Gender</th>
+            <th>Mobile Number</th>
+            <th>Tax ID (PAN)</th>
+            <th>Aadhaar Number</th>
+            <th>Status</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+    
+          <ng-container *ngIf="isLoading && filteredContacts.length === 0">
+            <tr *ngFor="let item of [1, 2, 3, 4, 5]">
+              <td>
+                <div class="skeleton skeleton-avatar-name">
+                  <div class="sk-circle"></div>
+                  <div class="sk-text sk-w60"></div>
+                </div>
+              </td>
+              <td><div class="skeleton sk-text sk-w80"></div></td>
+              <td><div class="skeleton sk-text sk-w40"></div></td>
+              <td><div class="skeleton sk-text sk-w60"></div></td>
+              <td><div class="skeleton sk-text sk-w40"></div></td>
+              <td><div class="skeleton sk-text sk-w60"></div></td>
+              <td><div class="skeleton sk-badge"></div></td>
+              <td><div class="skeleton sk-actions"></div></td>
+            </tr>
+          </ng-container>
+
+     
+          <tr *ngIf="!isLoading && filteredContacts.length === 0">
+            <td colspan="8" class="empty-state-cell">
+              <div class="empty-state-content">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <h3>No Contacts Found</h3>
+                <p>Try refining your search keyword or filters, or add a new profile to get started.</p>
+                <button class="btn btn-secondary btn-sm" (click)="openAddDrawer()">Add Contact</button>
+              </div>
+            </td>
+          </tr>
+
+       
+          <tr *ngFor="let contact of filteredContacts" class="contact-row">
+            <td>
+              <div class="profile-cell">
+                <div class="profile-avatar">
+                  {{ contact.first_name[0] | uppercase }}{{ contact.last_name[0] | uppercase }}
+                </div>
+                <div class="profile-info">
+                  <span class="fullname">{{ contact.first_name }} {{ contact.last_name }}</span>
+                  <span class="created-at">Added {{ contact.createdAt | date:'mediumDate' }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <a href="mailto:{{ contact.emailId }}" class="email-link">{{ contact.emailId }}</a>
+            </td>
+            <td>
+              <span class="age-gender-text">{{ contact.age }} yrs / {{ contact.gender }}</span>
+            </td>
+            <td>
+              <span class="mobile-text">{{ contact.mobilenumber }}</span>
+            </td>
+            <td>
+              <code class="doc-code">{{ contact.pan_no }}</code>
+            </td>
+            <td>
+              <span class="aadhaar-text">{{ contact.adhaar_no }}</span>
+            </td>
+            <td>
+              <span [ngClass]="contact.status ? 'badge badge-success' : 'badge badge-danger'">
+                {{ contact.status ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td>
+              <div class="actions-cell">
+                <button class="btn-icon" title="View Details" (click)="viewContact(contact.id)">
+                  <svg style="cursor: pointer;" lucideEye size="16"></svg>
+                </button>
+                <button class="btn-icon" title="Edit Contact" (click)="openEditDrawer(contact)">
+                  <svg style="cursor: pointer;" lucideSquarePen size="16"></svg>
+                </button>
+                <button class="btn-icon btn-icon-danger" title="Delete Contact" (click)="confirmDelete(contact.id)">
+                  <svg style="cursor: pointer;" lucideTrash2 size="16"></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="drawer-overlay" [class.active]="isDrawerOpen" (click)="closeDrawer()"></div>
+  
+  <div class="drawer-panel" [class.active]="isDrawerOpen">
+    <div class="drawer-header">
+      <h2>{{ editingContactId ? 'Edit Contact Details' : 'Add New Contact' }}</h2>
+      <button class="drawer-close-btn" (click)="closeDrawer()">&times;</button>
+    </div>
+
+    <form [formGroup]="contactForm" (ngSubmit)="saveContact()" class="drawer-body">
+   
+      <div class="row-grid">
+        <div class="form-group">
+          <label class="form-label">First Name *</label>
+          <input 
+            type="text" 
+            class="form-input" 
+            [class.invalid]="contactForm.get('first_name')?.touched && contactForm.get('first_name')?.invalid"
+            formControlName="first_name" 
+            placeholder="e.g. John"
+          />
+          <div *ngIf="contactForm.get('first_name')?.touched && contactForm.get('first_name')?.invalid" class="form-error">
+            <span *ngIf="contactForm.get('first_name')?.hasError('required')">First name is required.</span>
+            <span *ngIf="contactForm.get('first_name')?.hasError('pattern')">Alphabetical letters only.</span>
+            <span *ngIf="contactForm.get('first_name')?.hasError('minlength')">Must be at least 2 characters.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Last Name *</label>
+          <input 
+            type="text" 
+            class="form-input" 
+            [class.invalid]="contactForm.get('last_name')?.touched && contactForm.get('last_name')?.invalid"
+            formControlName="last_name" 
+            placeholder="e.g. Doe"
+          />
+          <div *ngIf="contactForm.get('last_name')?.touched && contactForm.get('last_name')?.invalid" class="form-error">
+            <span *ngIf="contactForm.get('last_name')?.hasError('required')">Last name is required.</span>
+            <span *ngIf="contactForm.get('last_name')?.hasError('pattern')">Alphabetical letters only.</span>
+            <span *ngIf="contactForm.get('last_name')?.hasError('minlength')">Must be at least 2 characters.</span>
+          </div>
+        </div>
+      </div>
+
+  
+      <div class="form-group">
+        <label class="form-label">Email Address *</label>
+        <input 
+          type="email" 
+          class="form-input" 
+          [class.invalid]="contactForm.get('emailId')?.touched && contactForm.get('emailId')?.invalid"
+          formControlName="emailId" 
+          placeholder="e.g. john.doe@domain.com"
+        />
+        <div *ngIf="contactForm.get('emailId')?.touched && contactForm.get('emailId')?.invalid" class="form-error">
+          <span *ngIf="contactForm.get('emailId')?.hasError('required')">Email is required.</span>
+          <span *ngIf="contactForm.get('emailId')?.hasError('email')">Please provide a valid email format.</span>
+        </div>
+      </div>
+
+  
+      <div class="row-grid">
+        <div class="form-group">
+          <label class="form-label">Age *</label>
+          <input 
+            type="text" 
+            class="form-input" 
+            [class.invalid]="contactForm.get('age')?.touched && contactForm.get('age')?.invalid"
+            formControlName="age" 
+            placeholder="e.g. 25"
+          />
+          <div *ngIf="contactForm.get('age')?.touched && contactForm.get('age')?.invalid" class="form-error">
+            <span *ngIf="contactForm.get('age')?.hasError('required')">Age is required.</span>
+            <span *ngIf="contactForm.get('age')?.hasError('min') || contactForm.get('age')?.hasError('max')">Age must be between 1 and 120.</span>
+            <span *ngIf="contactForm.get('age')?.hasError('pattern')">Age must be a valid integer.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Gender *</label>
+          <select 
+            class="form-select" 
+            [class.invalid]="contactForm.get('gender')?.touched && contactForm.get('gender')?.invalid"
+            formControlName="gender"
+          >
+            <option value="" disabled selected>Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <div *ngIf="contactForm.get('gender')?.touched && contactForm.get('gender')?.invalid" class="form-error">
+            Gender is required.
+          </div>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label class="form-label">Mobile Number *</label>
+        <input 
+          type="text" 
+          class="form-input" 
+          [class.invalid]="contactForm.get('mobilenumber')?.touched && contactForm.get('mobilenumber')?.invalid"
+          formControlName="mobilenumber" 
+          placeholder="10-digit number"
+        />
+        <div *ngIf="contactForm.get('mobilenumber')?.touched && contactForm.get('mobilenumber')?.invalid" class="form-error">
+          <span *ngIf="contactForm.get('mobilenumber')?.hasError('required')">Mobile number is required.</span>
+          <span *ngIf="contactForm.get('mobilenumber')?.hasError('pattern')">Mobile number must be exactly 10 digits.</span>
+        </div>
+      </div>
+
+   
+      <div class="form-group">
+        <label class="form-label">PAN Number *</label>
+        <input 
+          type="text" 
+          class="form-input uppercase-input" 
+          [class.invalid]="contactForm.get('pan_no')?.touched && contactForm.get('pan_no')?.invalid"
+          formControlName="pan_no" 
+          placeholder="Format: ABCDE1234F"
+          maxlength="10"
+        />
+        <div *ngIf="contactForm.get('pan_no')?.touched && contactForm.get('pan_no')?.invalid" class="form-error">
+          <span *ngIf="contactForm.get('pan_no')?.hasError('required')">PAN number is required.</span>
+          <span *ngIf="contactForm.get('pan_no')?.hasError('pattern')">Format invalid. Expected: 5 letters, 4 numbers, 1 letter.</span>
+        </div>
+      </div>
+
+  
+      <div class="form-group">
+        <label class="form-label">Aadhaar Number *</label>
+        <input 
+          type="text" 
+          class="form-input" 
+          [class.invalid]="contactForm.get('adhaar_no')?.touched && contactForm.get('adhaar_no')?.invalid"
+          formControlName="adhaar_no" 
+          placeholder="12-digit UID number"
+          maxlength="12"
+        />
+        <div *ngIf="contactForm.get('adhaar_no')?.touched && contactForm.get('adhaar_no')?.invalid" class="form-error">
+          <span *ngIf="contactForm.get('adhaar_no')?.hasError('required')">Aadhaar number is required.</span>
+          <span *ngIf="contactForm.get('adhaar_no')?.hasError('pattern')">Aadhaar number must be exactly 12 digits.</span>
+        </div>
+      </div>
+
+      
+      <div class="form-group status-toggle-group">
+        <span class="toggle-label">Account Status</span>
+        <label class="toggle-switch">
+          <input type="checkbox" formControlName="status" />
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="status-indicator-text" [ngStyle]="{'color': contactForm.get('status')?.value ? 'var(--success)' : 'var(--text-muted)'}">
+          {{ contactForm.get('status')?.value ? 'Active Profile' : 'Inactive Profile' }}
+        </span>
+      </div>
+
+    
+      <div class="drawer-actions">
+        <button type="button" class="btn btn-outline" (click)="closeDrawer()" [disabled]="isSaving">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+          <span class="spinner" *ngIf="isSaving"></span>
+          {{ isSaving ? 'Saving...' : 'Save Contact' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+
+  <div class="modal-overlay" *ngIf="showDeleteModal" (click)="closeDeleteModal()">
+    <div class="modal-card card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Confirm Contact Deletion</h3>
+        <button class="modal-close-btn" (click)="closeDeleteModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to permanently delete this contact profile? This action will remove the record from mockapi.io database and cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" (click)="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger" (click)="deleteContact()">Delete Profile</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal-overlay" *ngIf="showViewModal" (click)="closeViewModal()">
+    <div class="modal-card view-modal-card card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Contact Profile Details</h3>
+        <button class="modal-close-btn" (click)="closeViewModal()">&times;</button>
+      </div>
+      <div class="modal-body view-contact-body" *ngIf="selectedContactForView">
+        <div class="view-profile-header">
+          <div class="view-profile-avatar">
+            {{ selectedContactForView.first_name[0] | uppercase }}{{ selectedContactForView.last_name[0] | uppercase }}
+          </div>
+          <div class="view-profile-title">
+            <h4>{{ selectedContactForView.first_name }} {{ selectedContactForView.last_name }}</h4>
+            <span [ngClass]="selectedContactForView.status ? 'badge badge-success' : 'badge badge-danger'">
+              {{ selectedContactForView.status ? 'Active Profile' : 'Inactive Profile' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="view-profile-details">
+          <div class="detail-row">
+            <span class="detail-label">Email Address</span>
+            <span class="detail-val"><a href="mailto:{{ selectedContactForView.emailId }}" class="email-link">{{ selectedContactForView.emailId }}</a></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Mobile Number</span>
+            <span class="detail-val">{{ selectedContactForView.mobilenumber }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Age & Gender</span>
+            <span class="detail-val">{{ selectedContactForView.age }} Years Old / {{ selectedContactForView.gender }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Permanent Account Number (PAN)</span>
+            <span class="detail-val"><code class="doc-code">{{ selectedContactForView.pan_no }}</code></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Aadhaar UID Number</span>
+            <span class="detail-val">{{ selectedContactForView.adhaar_no }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Created Timestamp</span>
+            <span class="detail-val">{{ selectedContactForView.createdAt | date:'medium' }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="closeViewModal()">Close Details</button>
+      </div>
+    </div>
+  </div>
+</div>
