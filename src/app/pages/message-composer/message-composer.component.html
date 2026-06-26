@@ -8,7 +8,7 @@
 
 
   <header class="composer-header animate-fade-in">
-    <button class="back-btn">
+    <button class="back-btn" aria-label="Go back">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
     </button>
     <div class="header-text">
@@ -118,7 +118,7 @@
           <label class="form-label">Variable <span>&#123;&#123;1&#125;&#125;</span></label>
           <div class="input-action-wrapper">
             <input type="text" class="form-input" placeholder="Enter variable content" [(ngModel)]="variable1" />
-            <button class="action-btn" (click)="togglePopover(1, $event)">
+            <button class="action-btn" (click)="togglePopover(1, $event)" aria-label="Insert attribute for Variable 1">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             </button>
           </div>
@@ -129,7 +129,7 @@
           <label class="form-label">Variable <span>&#123;&#123;2&#125;&#125;</span></label>
           <div class="input-action-wrapper">
             <input type="text" class="form-input" placeholder="Enter variable content" [(ngModel)]="variable2" />
-            <button class="action-btn" (click)="togglePopover(2, $event)">
+            <button class="action-btn" (click)="togglePopover(2, $event)" aria-label="Insert attribute for Variable 2">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             </button>
           </div>

@@ -124,7 +124,7 @@
             <td>
               <div class="actions-cell">
                 <div class="dropdown-wrapper">
-                  <button class="btn-icon dropdown-toggle" (click)="toggleDropdown(contact.id, $event)" title="Actions">
+                  <button class="btn-icon dropdown-toggle" (click)="toggleDropdown(contact.id, $event)" title="Actions" aria-label="Toggle contact actions">
                     <svg lucideEllipsisVertical size="16"></svg>
                   </button>
                   <div class="dropdown-menu" [class.active]="activeDropdownId === contact.id">
@@ -156,7 +156,7 @@
   <div class="drawer-panel" [class.active]="isDrawerOpen">
     <div class="drawer-header">
       <h2>{{ editingContactId ? 'Edit Contact Details' : 'Add New Contact' }}</h2>
-      <button class="drawer-close-btn" (click)="closeDrawer()">&times;</button>
+      <button class="drawer-close-btn" (click)="closeDrawer()" aria-label="Close drawer">&times;</button>
     </div>
 
     <form [formGroup]="contactForm" (ngSubmit)="saveContact()" class="drawer-body">
@@ -325,7 +325,7 @@
     <div class="modal-card card" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Confirm Contact Deletion</h3>
-        <button class="modal-close-btn" (click)="closeDeleteModal()">&times;</button>
+        <button class="modal-close-btn" (click)="closeDeleteModal()" aria-label="Close modal">&times;</button>
       </div>
       <div class="modal-body">
         <p>Are you sure you want to permanently delete this contact profile? This action will remove the record from mockapi.io database and cannot be undone.</p>
@@ -342,7 +342,7 @@
     <div class="modal-card view-modal-card card" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>Contact Profile Details</h3>
-        <button class="modal-close-btn" (click)="closeViewModal()">&times;</button>
+        <button class="modal-close-btn" (click)="closeViewModal()" aria-label="Close details">&times;</button>
       </div>
       <div class="modal-body view-contact-body" *ngIf="selectedContactForView">
         <div class="view-profile-header">
