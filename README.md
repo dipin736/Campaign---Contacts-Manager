@@ -1,27 +1,56 @@
-# AngularAssignment
+# Campaign & Contacts Manager
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+A modern, premium administrative portal built in Angular 17. This application serves as a dashboard for marketing operations, allowing managers to compose rich promotional messages and manage client contact directories with full data validation and remote database integration.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Core Modules
 
-## Code scaffolding
+### 1. Contact Directory (`/contacts`)
+- **Profile Management**: Full CRUD operations for client profiles (First Name, Last Name, Email, Age, Gender, Mobile).
+- **Tax & Identity Verification**: Inputs with custom regex validation for official Indian identifiers:
+  - **PAN Card**: Format validation (`ABCDE1234F`).
+  - **Aadhaar Card**: 12-digit numeric UID validation.
+- **Search & Filters**: Instant name/email search and status filtering (All, Active, Inactive).
+- **Detail View**: Interactive modal popups to view individual profile card details.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### 2. Message Composer (`/message-composer`)
+- **Template Customization**: Live customizer for rich media campaigns (Diwali Sale Promo).
+- **Media Previews**: Supports image URL, video URL (.mp4), and document URL (.pdf) attachments with automatic visual previews inside a mock phone screen.
+- **Dynamic Variables**: Interactive popover search to insert standard and custom profile placeholders into the message template text.
+- **Location Tagging**: Precise coordinate (latitude/longitude) verification.
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Technical Stack
 
-## Running unit tests
+- **Framework**: Angular 17 (utilizing Standalone Components, Signals, and reactive architectures).
+- **Forms**: Reactive Forms API with advanced sync validators.
+- **Icons**: `@lucide/angular` standalone components for vector visuals.
+- **Styling**: Pure CSS design system with custom variables, smooth transitions, skeleton loaders, and responsive layouts.
+- **API**: Configured for remote asynchronous RESTful operations.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+---
 
-## Running end-to-end tests
+## Getting Started
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Installation
+```bash
+npm install
+```
 
-## Further help
+### Running Locally
+```bash
+npm start
+# or
+ng serve
+```
+Open [http://localhost:4200](http://localhost:4200) to view the portal in your browser.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Build Production Bundle
+```bash
+npm run build
+# or
+ng build
+```
+Build assets will be outputted to the `dist/angular-assignment` directory.
