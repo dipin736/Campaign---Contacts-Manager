@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ContactService, Contact } from '../../services/contact.service';
 import { ToastService } from '../../services/toast.service';
-import { LucideEye, LucideSquarePen, LucideTrash2 } from '@lucide/angular';
+import { LucideEye, LucideSquarePen, LucideTrash2, LucideEllipsisVertical } from '@lucide/angular';
 
 @Component({
   selector: 'app-contact-manager',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, LucideEye, LucideSquarePen, LucideTrash2],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, LucideEye, LucideSquarePen, LucideTrash2, LucideEllipsisVertical],
   templateUrl: './contact-manager.component.html',
   styleUrl: './contact-manager.component.css'
 })
@@ -29,6 +29,7 @@ export class ContactManagerComponent implements OnInit {
   deletingContactId: string | null = null;
   selectedContactForView: Contact | null = null;
   showViewModal = false;
+  activeDropdownId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -269,6 +270,17 @@ export class ContactManagerComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  toggleDropdown(id: string | undefined, event: Event) {
+    if (!id) return;
+    event.stopPropagation();
+    this.activeDropdownId = this.activeDropdownId === id ? null : id;
+  }
+
+  @HostListener('document:click')
+  closeAllDropdowns() {
+    this.activeDropdownId = null;
   }
 
 }
