@@ -87,14 +87,14 @@ import { Subscription } from 'rxjs';
       border: none;
       font-size: 1.25rem;
       line-height: 1;
-      color: #94a3b8;
+      color: #64748b;
       cursor: pointer;
       margin-left: 0.25rem;
       transition: color 0.15s ease;
     }
 
     .toast-close:hover {
-      color: #64748b;
+      color: #334155;
     }
 
 
